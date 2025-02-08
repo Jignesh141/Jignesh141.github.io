@@ -211,15 +211,14 @@ Whether it's architecting scalable backend systems, optimising code performance,
     <div id="contact">
         <h2>Get in Touch</h2>
         <div id="contact-form">
-            <form method="POST" action="https://formspree.io/email@email.com">
-                <input type="hidden" name="_subject" value="Contact request from personal website" />
-                <input type="email" name="_replyto" placeholder="Your email" required>
-                <textarea name="message" placeholder="Your message" required></textarea>
+            <form id="contactForm">
+                <input type="email" id="userEmail" placeholder="Your email" required>
+                <textarea id="userMessage" placeholder="Your message" required></textarea>
                 <button type="submit">Send</button>
             </form>
         </div>
-        <!-- End #contact-form -->
     </div>
+
     <!-- End #contact -->
 
     <footer>
@@ -265,9 +264,11 @@ Whether it's architecting scalable backend systems, optimising code performance,
 
 </html>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 
 <script>
+    
     // JavaScript function to handle resume download
     document.getElementById('download-resume').addEventListener('click', function (e) {
         e.preventDefault(); // Prevent the default anchor behavior
@@ -283,4 +284,36 @@ Whether it's architecting scalable backend systems, optimising code performance,
         anchor.click(); // Trigger the download
         document.body.removeChild(anchor); // Remove the anchor after download
     });
+
+    // Initialize EmailJS with your Public Key
+emailjs.init('NRibce4WT7OD4390L'); // Replace with your EmailJS Public Key
+
+// Add event listener to the form
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form from refreshing the page
+
+    // Get input values
+    const userEmail = document.getElementById('userEmail').value;
+    const userMessage = document.getElementById('userMessage').value;
+
+    // Create email parameters
+    const emailParams = {
+        from_email: userEmail, // Sender's email
+        message: userMessage,  // Message body
+    };
+
+    // Send email using EmailJS
+    emailjs.send('service_lhhgo0a', 'template_9tr1zrl', emailParams)
+        .then(function (response) {
+            alert('Email sent successfully!');
+            console.log('SUCCESS!', response.status, response.text);
+        }, function (error) {
+            alert('Failed to send email. Please try again.');
+            console.error('FAILED...', error);
+        });
+
+    // Optionally, reset the form
+    document.getElementById('contactForm').reset();
+});
+
 </script>
